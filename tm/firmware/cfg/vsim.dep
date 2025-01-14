@@ -8,4 +8,4 @@ src emp_project_decl.vhd
 
 src -c emp-fwk:components/links/slink emp_slink_types.vhd
 
-include -c emp-fwk:boards/apollo/cm_v2/vu13p device.dep packages_cm_v2.dep
+include -c emp-fwk:boards/apollo/cm_v2/vu13p cm_v2_p1_2.dep device.dep packages_cm_v2_p1.dep

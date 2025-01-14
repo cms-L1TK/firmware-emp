@@ -21,7 +21,7 @@
 #resize_pblock payload -add SLICE_X0Y60:SLICE_X148Y599
 #set_property gridtypes {URAM288 RAMB36 RAMB18 DSP48E2 SLICE} [get_pblocks payload]
 
-add_cells_to_pblock [get_pblock payload] payload
+#add_cells_to_pblock [get_pblock payload] payload
 
 #create_pblock infra
 #resize_pblock infra -add SLICE_X0Y0:SLICE_X168Y59
