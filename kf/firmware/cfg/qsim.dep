@@ -1,0 +1,13 @@
+include -c emp-fwk:boards/testbench top.dep
+
+include payload.dep
+src tb_decl.vhd
+src emp_project_decl.vhd 
+
+src -c emp-fwk:components/links/slink emp_slink_types.vhd
+
+# include -c emp-fwk:boards/apollo/cm_v2/vu13p cm_v2_p1_2.dep device.dep packages_cm_v2_p1.dep
+# The following are hacks to make it work. Uncomment the above once the issues have been resolved, see https://gitlab.cern.ch/p2-xware/firmware/emp-fwk/-/issues/51
+@fpga_speed_grade = "-2-e"
+include -c emp-fwk:boards/apollo/cm_v2/vu13p device.dep packages_cm_v2_p1.dep
+src -c emp-fwk:boards/apollo/cm_v2/vu13p board_design_id_p1.vhd
