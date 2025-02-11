@@ -64,7 +64,7 @@ END kfout_router;
  -------------------------------------------------------------------------
  ARCHITECTURE rtl OF kfout_router IS
 
-   SIGNAL Output         : Vector( 0 TO DataOut'LENGTH-1 )                         := NullVector( DataOut'LENGTH );
+   CONSTANT OutputNull     : tData := cNull;
 
    SIGNAL reset_array : std_logic_vector(0 TO 7) := (OTHERS=>'0');
 
@@ -88,7 +88,8 @@ END kfout_router;
      SIGNAL ReadAddr     :tAddressArray := ( OTHERS => 0 );
      SIGNAL ReadAddr_delay     :tAddressArray := ( OTHERS => 0 );
 
-     SIGNAL out_counter : INTEGER_VECTOR( 0 TO 2) := (OTHERS=>0);
+     SIGNAL out_counter : INTEGER := 0;
+     SIGNAL Addresses_ram_readdelay : INTEGER_VECTOR(0 TO 1) := (OTHERS=>0);
 
    BEGIN
 
@@ -121,7 +122,7 @@ END kfout_router;
      
        IF reset = '1' THEN
          buffer_counter := 0;
-         --Addresses_ram <= (OTHERS=>0);
+         Addresses_ram <= (OTHERS => DataIn'LENGTH);
          WriteAddr <= ( OTHERS => 0 );
        END IF;
 
@@ -155,17 +156,21 @@ END kfout_router;
    BEGIN
      IF( RISING_EDGE( clk ) ) THEN
 
-       DataOut( j ) <= RamCells(Addresses_ram_delay( out_counter(2)));
+       IF Addresses_ram_readdelay(1)/=DataIn'LENGTH THEN
+         DataOut( j ) <= RamCells(Addresses_ram_readdelay(1));
+       ELSE
+         DataOut( j ) <= OutputNull;
+       END IF;
 
-       out_counter(1) <= out_counter(0);
-       out_counter(2) <= out_counter(1);
+       Addresses_ram_readdelay(0) <= Addresses_ram_delay(out_counter);
+       Addresses_ram_readdelay(1) <= Addresses_ram_readdelay(0);
   
        IF reset_array(2) = '1' THEN
          ReadAddr <= ( OTHERS => 0 );
-         out_counter(0) <= 0;
-       ELSE
-         out_counter(0) <= (out_counter(0) + 1) MOD (PacketBufferLength + 1);
-         ReadAddr( Addresses_ram_delay( out_counter(0)  ) ) <=   (ReadAddr( Addresses_ram_delay( out_counter(0)  ) ) + 1) MOD PacketBufferLength;
+         out_counter <= 0;
+       ELSIF Addresses_ram_delay(out_counter)/=DataIn'LENGTH THEN
+         out_counter <= (out_counter + 1) MOD (PacketBufferLength + 1);
+         ReadAddr( Addresses_ram_delay( out_counter  ) ) <=   (ReadAddr( Addresses_ram_delay( out_counter  ) ) + 1) MOD PacketBufferLength;
 
        END IF;
 
