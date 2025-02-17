@@ -1,0 +1,12 @@
+src emp_payload.vhd
+
+src -c l1tk-for-emp:tm tm_isolation.vhd
+src -c l1tk-for-emp:kf kf_isolation.vhd
+
+include -c l1tk-for-emp:tm components.dep
+include -c l1tk-for-emp:dr components.dep
+include -c l1tk-for-emp:kf components.dep
+
+include -c l1tk-for-emp:common components.dep
+
+addrtab -c emp-fwk:components/payload emp_payload.xml 

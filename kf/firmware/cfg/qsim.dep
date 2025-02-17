@@ -1,10 +1,12 @@
 include -c emp-fwk:boards/testbench top.dep
 
-include payload.dep
 src tb_decl.vhd
-src emp_project_decl.vhd 
+include payload.dep
 
 src -c emp-fwk:components/links/slink emp_slink_types.vhd
+
+#include -c emp-fwk:boards/serenity/dc_vu13p packages_so2.dep
+#include -c emp-fwk:boards/serenity/dc_vu13p device.dep
 
 # include -c emp-fwk:boards/apollo/cm_v2/vu13p cm_v2_p1_2.dep device.dep packages_cm_v2_p1.dep
 # The following are hacks to make it work. Uncomment the above once the issues have been resolved, see https://gitlab.cern.ch/p2-xware/firmware/emp-fwk/-/issues/51

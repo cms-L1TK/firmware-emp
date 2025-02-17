@@ -6,7 +6,7 @@ use work.emp_project_decl.all;
 package tb_decl is
 
 
-constant SOURCE_FILE         : string := "in.txt";
+constant SOURCE_FILE         : string := "/users/sb19423/integration_test/tf_integration_work/proj/emData/dr/in.txt";
 constant SINK_FILE           : string := "out.txt"; 
 
 constant PLAYBACK_LENGTH     : integer := 9 * 162;
