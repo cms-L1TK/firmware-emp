@@ -1,8 +1,8 @@
-# Building/Simulating the Summer Chain #
+# Building/Simulating the Track Finder Chain #
 
-This repository contains the payload project for the Hybrid Summer Chain - compatible with the extensible, modular firmware framework for phase-2 upgrades.
+This repository contains payload projects for the end of the Track Finder chain - compatible with the extensible, modular processor (EMP) firmware framework for phase-2 upgrades.
 
-The project can be built against multiple boards, but has so far been implemented for the Apollo (VU7P) and Serenity (KU15P).
+The project can be built against multiple boards, but has so far been implemented for the Apollo (VU13P) and Serenity (VU13P).
 
 ## Quick start instructions for developers ##
 
@@ -14,58 +14,72 @@ Make sure that the [Prerequisites](#prerequisites) are satisfied.
 ipbb init work
 cd work
 kinit myusername@CERN.CH
-ipbb add git https://:@gitlab.cern.ch:8443/p2-xware/firmware/emp-fwk.git -b v0.7.0-alpha
-ipbb add git https://github.com/apollo-lhc/CM_FPGA_FW -b v1.2.2
+
 ipbb add git https://gitlab.cern.ch/ttc/legacy_ttc.git -b v2.1
 ipbb add git https://:@gitlab.cern.ch:8443/cms-tcds/cms-tcds2-firmware.git -b v0_1_1
-ipbb add git https://gitlab.cern.ch/HPTD/tclink.git -r fda0bcf
-ipbb add git https://gitlab.cern.ch/dth_p1-v2/slinkrocket_ips.git -b v03.09
-ipbb add git https://:@gitlab.cern.ch:8443/dth_p1-v2/slinkrocket.git -b v03.10
-ipbb add git https://github.com/ipbus/ipbus-firmware -b v1.9
+ipbb add git https://gitlab.cern.ch/HPTD/tclink.git -r fda0bcf07c501f81daeec1421ffdfb46f828f823
+ipbb add git https://gitlab.cern.ch/dth_p1-v2/slinkrocket_ips.git -b v03.12
+ipbb add git https://github.com/ipbus/ipbus-firmware -b v1.14.1
 ipbb add git https://gitlab.cern.ch/gbt-fpga/gbt-fpga.git -b gbt_fpga_6_1_0
 ipbb add git https://gitlab.cern.ch/gbt-fpga/lpgbt-fpga.git -b v.2.1
-ipbb add git https://:@gitlab.cern.ch:8443/gbtsc-fpga-support/gbt-sc.git -b gbt_sc_4_1
-ipbb add git https://github.com/cms-L1TK/l1tk-for-emp.git
+ipbb add git https://:@gitlab.cern.ch:8443/gbtsc-fpga-support/gbt-sc.git -b gbt_sc_4_3
+ipbb add git https://github.com/apollo-lhc/CM_FPGA_FW -b v3.0.0
+ipbb add git https://:@gitlab.cern.ch:8443/p2-xware/firmware/emp-fwk.git -b v0.9.3
+ipbb add git https://github.com/cms-L1TK/l1tk-for-emp.git -b update_emp_version
 ```
 
 *Note: You need to be a member of the `cms-tcds2-users` egroup in order to clone the `cms-tcds2-firmware` repository. In order to add yourself to that egroup, go to the "Members" tab of [this page](https://e-groups.cern.ch/e-groups/Egroup.do?egroupId=10380295), and click on the "Add me" button; you may need to wait ~ 24 hours to get access to the GitLab repo.*
 
+Some repositories might require 2-factor authenication to clone, thus create a personal access token on [gitlab](https://gitlab.cern.ch:8443/help/user/profile/personal_access_tokens.md) and use said token to download the repositories, e.g.
+
+```
+ipbb add git https://gitlab-ci-token:INSERT_TOKEN_HERE@gitlab.cern.ch:8443/p2-xware/firmware/emp-fwk.git -b v0.9.1
+ipbb add git https://gitlab-ci-token:INSERT_TOKEN_HERE@gitlab.cern.ch:8443/cms-tcds/cms-tcds2-firmware.git -b v0_1_1
+ipbb add git https://gitlab-ci-token:INSERT_TOKEN_HERE@gitlab.cern.ch:8443/dth_p1-v2/slinkrocket.git -b v03.12
+```
 
 ##### Step 2: Create an ipbb project area
 
-There is currently two available projects
+Some of the available projects are currently
 
 | Description                                              | `.dep` file name                  |
 | -------------------------------------------------------- | --------------------------------- |
-| Hybrid Summer Chain                                      | `serenity.dep`                    |
+| Track Merger (tm)                                        | `apollo.dep`                      |
+| Track Merger (tm)                                        | `serenity.dep`                    |
+| Duplicate Remover (dr)                                   | `apollo.dep`                      |
+| Kalman Filter (kf)                                       | `apollo.dep`                      |
+| TM to KF (tmdrkf)                                        | `apollo.dep`                      |
+| TM to DR (tmdr)                                          | `apollo.dep`                      |
+| DR to KF (drkf)                                          | `apollo.dep`                      |
 | Hybrid Summer Chain                                      | `apollo.dep`                      |
+| Hybrid Summer Chain                                      | `Serenity.dep`                    |
 
-The project area for Hybrid Summer Chain can be created as follows.
+A project area can be created as follows:
 
-For implementation:
+For board implementation:
 ```
-ipbb proj create vivado tracklet l1tk-for-emp:tracklet 'apollo.dep'
-cd proj/tracklet
+ipbb proj create vivado FOLDER_NAME l1tk-for-emp:PROJECT_NAME 'apollo.dep'
+cd proj/FOLDER_NAME
 ```
 
 For questa simulation testbench:
 ```
-ipbb proj create sim qsim l1tk-for-emp:tracklet 'qsim.dep'
-ln -s ../src/l1tk-for-emp/tracklet/firmware/emData/ proj/
-cd proj/qsim
+ipbb proj create sim FOLDER_NAME l1tk-for-emp:PROJECT_NAME 'qsim.dep'
+ln -s ../src/l1tk-for-emp/tracklet/firmware/emData/ proj/ % I don't do this... I specify the path to the input files manually
+cd proj/FOLDER_NAME
 ```
 
 For vivado simulation testbench:
 ```
-ipbb proj create sim vsim l1tk-for-emp:tracklet 'vsim.dep'
-ln -s ../src/l1tk-for-emp/tracklet/firmware/emData/ proj/
-cd proj/vsim
+ipbb proj create sim FOLDER_NAME l1tk-for-emp:PROJECT_NAME 'vsim.dep'
+ln -s ../src/l1tk-for-emp/tracklet/firmware/emData/ proj/ % I don't do this... I specify the path to the input files manually
+cd proj/FOLDER_NAME
 ```
 
 ##### Step 3: Implementation and simulation
 
 
-For implementation:
+For board implementation:
 Note: For the following commands, you need to ensure that can find & use the `gen_ipbus_addr_decode` script - e.g. for a standard uHAL installation:
 ```
 export PATH=/opt/cactus/bin/uhal/tools:$PATH LD_LIBRARY_PATH=/opt/cactus/lib:$LD_LIBRARY_PATH
@@ -121,12 +135,12 @@ python3 ../src/l1tk-for-emp/script/compareEMP_FT.py
  * Xilinx Vivado 2022.1 (or later)
  * Python 2.7 - available on most linux distributions, natively or as [miniconda](https://conda.io/miniconda.html) distribution.
  * Python 3 devel
- * ipbb: `dev/2022d` pre-release or greater - the [IPbus Builder Tool](https://github.com/ipbus/ipbb). Note: a single `ipbb` installation is not work area specific and suffices for any number of projects.
+ * ipbb: `dev/2024b` pre-release or greater - the [IPbus Builder Tool](https://github.com/ipbus/ipbb). Note: a single `ipbb` installation is not work area specific and suffices for any number of projects.
  
 ```
-curl -L https://github.com/ipbus/ipbb/archive/dev/2022f.tar.gz | tar xvz
-source ipbb-dev-2022f/env.sh
-(or if you use tcsh:  bash -c 'source ipbb-dev-2022f/env.sh; tcsh -l')
+curl -L https://github.com/ipbus/ipbb/archive/dev/2024b.tar.gz | tar xvz
+source ipbb-dev-2024b/env.sh
+(or if you use tcsh:  bash -c 'source ipbb-dev-2024b/env.sh; tcsh -l')
 ```
 
 ## Guide to firmware ##
