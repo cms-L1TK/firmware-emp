@@ -8,7 +8,7 @@ The project can be built against multiple boards, but has so far been implemente
 
 Make sure that the [Prerequisites](#prerequisites) are satisfied.
 
-##### Step 1: Setup the work area
+### Step 1: Setup the work area
 
 ```
 ipbb init work
@@ -38,7 +38,7 @@ ipbb add git https://gitlab-ci-token:INSERT_TOKEN_HERE@gitlab.cern.ch:8443/cms-t
 ipbb add git https://gitlab-ci-token:INSERT_TOKEN_HERE@gitlab.cern.ch:8443/dth_p1-v2/slinkrocket.git -b v03.12
 ```
 
-##### Step 2: Create an ipbb project area
+### Step 2: Create an ipbb project area
 
 Some of the available projects are currently
 
@@ -56,35 +56,35 @@ Some of the available projects are currently
 
 A project area can be created as follows:
 
-For board implementation:
+#### For board implementation:
 ```
 ipbb proj create vivado FOLDER_NAME l1tk-for-emp:PROJECT_NAME 'apollo.dep'
 cd proj/FOLDER_NAME
 ```
 
-For questa simulation testbench:
+#### For questa simulation testbench:
 ```
 ipbb proj create sim FOLDER_NAME l1tk-for-emp:PROJECT_NAME 'qsim.dep'
 ln -s ../src/l1tk-for-emp/tracklet/firmware/emData/ proj/ % I don't do this... I specify the path to the input files manually
 cd proj/FOLDER_NAME
 ```
 
-For vivado simulation testbench:
+#### For vivado simulation testbench:
 ```
 ipbb proj create sim FOLDER_NAME l1tk-for-emp:PROJECT_NAME 'vsim.dep'
 ln -s ../src/l1tk-for-emp/tracklet/firmware/emData/ proj/ % I don't do this... I specify the path to the input files manually
 cd proj/FOLDER_NAME
 ```
 
-##### Step 3: Implementation and simulation
+### Step 3: Implementation and simulation
 
-
-For board implementation:
 Note: For the following commands, you need to ensure that can find & use the `gen_ipbus_addr_decode` script - e.g. for a standard uHAL installation:
 ```
 export PATH=/opt/cactus/bin/uhal/tools:$PATH LD_LIBRARY_PATH=/opt/cactus/lib:$LD_LIBRARY_PATH
 ```
 Run the following IPBB commands:
+
+#### For board implementation:
 ```
 ipbb ipbus gendecoders
 ipbb vivado generate-project --single
@@ -92,8 +92,7 @@ ipbb vivado synth -j8 impl -j8
 ipbb vivado package
 ```
 
-
-For questa simulation testbench:
+#### For questa simulation testbench:
 ```
 ipbb sim setup-simlib
 ipbb sim ipcores
@@ -112,7 +111,7 @@ python3 ../src/l1tk-for-emp/script/convert_emData2EMP_Link.py
 
 *N.B.* The Xilinx simulation libraries can be shared between different ipbb projects and work areas. By default they are written to `${HOME}/.xilinx_sim_libs`, but they can be written to another directory by defining the environment variable `IPBB_SIMLIB_BASE` before running these two commands, or by adding the `-x` option to end of each command (e.g. `-x /path/to/simlib_directory`).
 
-For vivado simulation testbench:
+#### For vivado simulation testbench:
 ```
 ipbb vivado generate-project
 ```
