@@ -54,7 +54,7 @@ Some of the available projects are currently
 | Hybrid Summer Chain                                      | `apollo.dep`                      |
 | Hybrid Summer Chain                                      | `Serenity.dep`                    |
 
-A project area can be created as follows:
+A project area can be created as specified below.
 
 #### For board implementation:
 ```
@@ -82,7 +82,7 @@ Note: For the following commands, you need to ensure that can find & use the `ge
 ```
 export PATH=/opt/cactus/bin/uhal/tools:$PATH LD_LIBRARY_PATH=/opt/cactus/lib:$LD_LIBRARY_PATH
 ```
-Run the following IPBB commands:
+Run the following IPBB commands.
 
 #### For board implementation:
 ```

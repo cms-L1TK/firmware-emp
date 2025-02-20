@@ -11,6 +11,8 @@ package emp_project_decl is
 
 constant PAYLOAD_REV: std_logic_vector(31 downto 0) := X"12345678";
 
+constant SLINK_CONF : slink_conf_array_t := ( others  => kNoSlink ); 
+
 constant LB_ADDR_WIDTH  : integer := 10;
 
 constant CLOCK_AUX_DIV     : clock_divisor_array_t := (12, 8, 6);
@@ -40,8 +42,6 @@ constant REGION_CONF : region_conf_array_t := (
     16 => ( no_mgt, buf,    no_fmt, no_buf, no_mgt ),
     others => kDummyRegion
 );
-
-constant SLINK_CONF : slink_conf_array_t := ( others  => kNoSlink ); 
 
 
 end;
